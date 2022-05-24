@@ -1,4 +1,4 @@
-import { ConnectionOptions } from 'typeorm';
+import { ConnectionOptions, DataSource } from 'typeorm';
 const config: ConnectionOptions = {
   type: 'postgres',
   host: 'localhost',
