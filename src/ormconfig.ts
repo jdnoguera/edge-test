@@ -1,4 +1,4 @@
-import { ConnectionOptions, DataSource } from 'typeorm';
+import { ConnectionOptions } from 'typeorm';
 const config: ConnectionOptions = {
   type: 'sqlite',
   database: 'todo-list',

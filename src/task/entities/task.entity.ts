@@ -8,16 +8,16 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { JoinColumn } from 'typeorm';
-import {Exclude} from "class-transformer";
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Task {
   constructor(title: string, description: string, userId: number) {
     this.Title = title;
-    this.Description = description
-    this.UserId = userId
+    this.Description = description;
+    this.UserId = userId;
   }
-  
+
   @PrimaryGeneratedColumn()
   Id: number;
   @Column({ length: 100 })
@@ -26,7 +26,7 @@ export class Task {
   Description: string;
   @CreateDateColumn()
   CreatedAt: Date;
-  @Exclude({toPlainOnly: true})
+  @Exclude({ toPlainOnly: true })
   @DeleteDateColumn()
   IsDeleted: Date;
   @ManyToOne(() => User)

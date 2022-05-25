@@ -4,7 +4,6 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { Result } from '../shared/Result';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -13,14 +12,23 @@ export class UsersService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async create({ Name, Email, LastName, Password}: CreateUserDto): Promise<Result> {
-    const user = new User(Name,LastName,Email,await this.hashPassword(Password));
-    await this.userRepository.save(user);
-    return Result.ok();
+  async create({
+    Name,
+    Email,
+    LastName,
+    Password,
+  }: CreateUserDto): Promise<User> {
+    const user = new User(
+      Name,
+      LastName,
+      Email,
+      await this.hashPassword(Password),
+    );
+    return this.userRepository.save(user);
   }
 
-  async findAll(): Promise<Result> {
-    return Result.ok(await this.userRepository.find());
+  findAll(): Promise<User[]> {
+    return this.userRepository.find();
   }
 
   findByEmail(email: string): Promise<User> {
@@ -31,17 +39,15 @@ export class UsersService {
     return this.userRepository.findOneBy({ Id: id });
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto): Promise<Result> {
-    await this.userRepository.update({ Id: id }, updateUserDto as User);
-    return Result.ok();
+  update(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+    return this.userRepository.save({ Id: id, ...updateUserDto });
   }
 
-  async hashPassword(password: string) {
-    const salt = await bcrypt.genSalt();
-    return await bcrypt.hash(password, salt);
+  hashPassword(password: string): Promise<string> {
+    return bcrypt.hash(password, 11);
   }
 
-  async validatePassword(insertedPassword: string, userPassword: string) {
+  validatePassword(insertedPassword: string, userPassword: string): boolean {
     return bcrypt.compareSync(insertedPassword, userPassword);
   }
 }

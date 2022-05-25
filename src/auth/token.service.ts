@@ -7,10 +7,10 @@ import { User } from '../users/entities/user.entity';
 export class TokenService {
   constructor(private JwtService: JwtService) {}
 
-  generateTokens(user: User){
+  generateTokens(user: User) {
     const payload: JwtPayload = {
       userName: user.Name,
-      sub: user.Id.toString()
+      sub: user.Id.toString(),
     };
 
     return {

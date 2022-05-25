@@ -3,26 +3,28 @@ import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login-dto';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { RefreshTokenDto } from './dto/refresh-token-dto';
+import { User } from '../users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    const result = await this.authService.login(loginDto);
-    return result.toHttpResponse();
+  login(
+    @Body() loginDto: LoginDto,
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    return this.authService.login(loginDto);
   }
 
   @Post('register')
-  async create(@Body() createUserDto: CreateUserDto) {
-    const result = await this.authService.register(createUserDto);
-    return result.toHttpResponse();
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.authService.register(createUserDto);
   }
 
   @Post('refresh-token')
-  async refresh(@Body() { refreshToken }: RefreshTokenDto) {
-    const result = await this.authService.refreshToken(refreshToken);
-    return result.toHttpResponse();
+  refresh(
+    @Body() { refreshToken }: RefreshTokenDto,
+  ): Promise<{ access_token: string; refresh_token: string }> {
+    return this.authService.refreshToken(refreshToken);
   }
 }

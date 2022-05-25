@@ -1,17 +1,30 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, UseGuards} from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  UseGuards,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import {ApiBearerAuth} from "@nestjs/swagger";
-import {UserId} from "../decorators/user.decorators";
-import {JwtGuard} from "../auth/jwt.guard";
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { UserId } from '../decorators/user.decorators';
+import { JwtGuard } from '../auth/jwt.guard';
 
 @UseGuards(JwtGuard)
 @ApiBearerAuth()
+@UseInterceptors(ClassSerializerInterceptor)
 @Controller('task')
 export class TaskController {
   constructor(private readonly taskService: TaskService) {}
-  
+
   @Get()
   findAll() {
     return this.taskService.findAll();
@@ -28,7 +41,10 @@ export class TaskController {
   }
 
   @Patch(':id')
-  update(@Param('id', ParseIntPipe) id: number, @Body() updateTaskDto: UpdateTaskDto) {
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateTaskDto: UpdateTaskDto,
+  ) {
     return this.taskService.update(id, updateTaskDto);
   }
 

@@ -5,12 +5,15 @@ import {
   Body,
   Patch,
   Param,
-  Delete, ParseIntPipe, UseInterceptors, ClassSerializerInterceptor,
+  ParseIntPipe,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import {ApiBearerAuth} from "@nestjs/swagger";
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { User } from './entities/user.entity';
 
 @ApiBearerAuth()
 @UseInterceptors(ClassSerializerInterceptor)
@@ -29,14 +32,15 @@ export class UsersController {
   }
 
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    const result = await this.usersService.create(createUserDto);
-    return result.toCreatedHttpResponse();
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.usersService.create(createUserDto);
   }
-  
+
   @Patch(':id')
-  async update(@Param('id', ParseIntPipe) id: number, @Body() updateUserDto: UpdateUserDto) {
-    const result = await this.usersService.update(id, updateUserDto);
-    return result.toHttpResponse();
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ): Promise<User> {
+    return this.usersService.update(id, updateUserDto);
   }
 }
