@@ -10,13 +10,13 @@ export class TokenService {
   generateTokens(user: User){
     const payload: JwtPayload = {
       userName: user.Name,
+      sub: user.Id.toString()
     };
 
     return {
       access_token: this.JwtService.sign(payload, {
         privateKey: process.env.ACCESS_SECRET,
-        subject: user.Id.toString(),
-        expiresIn: '5m',
+        expiresIn: '60m',
       }),
       refresh_token: this.JwtService.sign(
         {},

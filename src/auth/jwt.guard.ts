@@ -2,7 +2,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { ExecutionContext, UnauthorizedException } from '@nestjs/common';
 import { Observable } from 'rxjs';
 
-export class JwtGard extends AuthGuard('jwt') {
+export class JwtGuard extends AuthGuard('jwt') {
   constructor() {
     super();
   }

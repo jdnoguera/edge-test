@@ -23,12 +23,12 @@ export class UsersService {
     return Result.ok(await this.userRepository.find());
   }
 
-  async findByEmail(email: string): Promise<User> {
-    return await this.userRepository.findOneBy({ Email: email });
+  findByEmail(email: string): Promise<User> {
+    return this.userRepository.findOneBy({ Email: email });
   }
 
-  async findOne(id: number): Promise<User> {
-    return await this.userRepository.findOneBy({ Id: id });
+  findOne(id: number): Promise<User> {
+    return this.userRepository.findOneBy({ Id: id });
   }
 
   async update(id: number, updateUserDto: UpdateUserDto): Promise<Result> {

@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Task } from '../../task/entities/task.entity';
+import {Exclude} from "class-transformer";
 
 @Entity()
 export class User {
@@ -9,7 +16,7 @@ export class User {
     this.Password = password; //hashed
   }
 
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   Id: number;
   @Column({ length: 50 })
   Name: string;
@@ -17,6 +24,9 @@ export class User {
   LastName: string;
   @Column({ length: 50 })
   Email: string;
-  @Column({ length: 50 })
+  @Column({ length: 60, type: 'text' })
+  @Exclude({toPlainOnly: true})
   Password: string;
+  @OneToMany(() => Task, (t) => t.User)
+  Tasks: Task[];
 }
